@@ -43,26 +43,35 @@ public class AuthServlet extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		
-		out.println("Auth type is: " + authType); // will not show due to redirect
+		out.println("Auth type is: " + authType);
 		
 		if ( authType != null && authType.equals("login") ) {
 			// validate credentials
 			// todo: this
-			out.println("Username is: " + username); // will not show due to redirect
-			out.println("Password is: " + password); // will not show due to redirect
+			out.println("Username is: " + username);
+			out.println("Password is: " + password);
+			
+			MySQLConnector mysqlConnector = new MySQLConnector();
+			if( mysqlConnector.connect() ) {
+				out.println("SQL Connection success.");
+			} else {
+				out.println("SQL Connection failed.");
+			}
 			
 			// set session vars
 			HttpSession session = request.getSession();
 			session.setAttribute("username", username);
 			
-			response.sendRedirect(request.getContextPath() + "/home.jsp");
+			// terminate sql connection
+			//mysqlConnector.disconnect():
+			
+			// redirect user (temp disabled)
+			//response.sendRedirect(request.getContextPath() + "/home.jsp");
 		}
 		else {
 			// no auth type provided, send user back to auth page
 			response.sendRedirect(request.getContextPath() + "/auth.jsp");
 		}
-		
-		
 	}
 
 }
